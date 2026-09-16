@@ -1,0 +1,3 @@
+import { useCallback, useEffect, useState } from "react";
+import { applyAccrual, clearAll, defaultState, load, pruneOldCalendar, save, type KompState } from "./kompsaldo";
+export function useKompSaldo(){const[state,setState]=useState<KompState>(defaultState);const[ready,setReady]=useState(false);useEffect(()=>{const loaded=pruneOldCalendar(applyAccrual(load()));setState(loaded);save(loaded);setReady(true)},[]);const update=useCallback((fn:(s:KompState)=>KompState)=>{setState(prev=>{const next=fn(prev);save(next);return next})},[]);const reset=useCallback(()=>{clearAll();setState(defaultState())},[]);return{state,ready,update,reset}}
