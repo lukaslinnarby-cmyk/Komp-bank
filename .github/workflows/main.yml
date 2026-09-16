@@ -22,12 +22,11 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '21'
 
       - name: Check project files
         run: |
-          ls -la
           test -f package.json
           test -f index.html
           test -f capacitor.config.ts
@@ -39,12 +38,13 @@ jobs:
         run: npm run build
 
       - name: Verify web build
-        run: |
-          test -f dist/index.html
-          ls -la dist
+        run: test -f dist/index.html
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Configure Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
 
       - name: Create Android project
         run: |
